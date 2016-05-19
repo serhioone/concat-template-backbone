@@ -19,8 +19,6 @@ module.exports = function(fileName, options) {
     var text = header;
 
     function bufferContents(file, enc, callback) {
-        // gutil.log(file.path);
-
         // ignore empty files
         if (file.isNull()) {
           callback();
@@ -34,38 +32,14 @@ module.exports = function(fileName, options) {
         var methodName = file.relative.split('.');
 
         text += "\n\t" + options.prefix + "." + methodName[0] + " = '"
-        text += file.contents.toString().replace(/(\r\n|\n|\r|\t)/gm,"").replace(/\s{2,}/g, ' ');
-        text += "'";
-
-        // minify(file.path, function(error, data) {
-        //     if (error) {
-        //         console.error(error.message);
-        //     } else {
-        //         console.log(data);
-        //         text += data;
-        //         // console.log(text);
-        //         // console.log("------");
-        //     }
-        // });
-
-        // console.log(compileText);
-
-        
+        text += "<script>" + file.contents.toString().replace(/(\r\n|\n|\r|\t)/gm,"").replace(/\s{2,}/g, ' ') + "</script>";
+        text += "';";
 
         callback();
     };
 
     function endStream(callback) {
         
-        // console.log(text += footer);
-
-        // exportFile.relative = "test.js";
-        // exportFile.contents = text + footer;
-
-        // console.log(exportFile);
-        // this.push(text + footer);
-
-        //Configure outgoing file.
         var joinedPath = path.join(firstFile.base, fileName);
 
         var joinedFile = new File({
@@ -75,7 +49,6 @@ module.exports = function(fileName, options) {
             ,contents: new Buffer(text + footer)
         });
 
-        // console.log(joinedFile);
         this.push(joinedFile);
         callback();
     }
