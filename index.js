@@ -19,6 +19,7 @@ module.exports = function(fileName, options) {
     var text = header;
 
     function bufferContents(file, enc, callback) {
+
         // ignore empty files
         if (file.isNull()) {
           callback();
@@ -30,8 +31,10 @@ module.exports = function(fileName, options) {
         }
 
         var methodName = file.relative.split('.');
+        var dirName = file.base.split("templates/")[1].split("/");
+        var dj = dirName.length - 2;
 
-        text += "\n\t" + options.prefix + "." + methodName[0] + " = '"
+        text += "\n\t" + options.prefix + "." + dirName[dj] + "." + methodName[0] + " = '"
         text += "<script>" + file.contents.toString().replace(/(\r\n|\n|\r|\t)/gm,"").replace(/\s{2,}/g, ' ') + "</script>";
         text += "';";
 
